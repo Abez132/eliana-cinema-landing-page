@@ -8,50 +8,94 @@ export default function LocationSection() {
   const ethiopic = lang === "am" ? "font-ethiopic" : "";
 
   return (
-    <section id="visit" className="bg-cream-dark py-24 md:py-32">
-      <div className="mx-auto max-w-6xl px-6" lang={lang}>
-        <Reveal className="text-center">
-          <p className={`eyebrow ${ethiopic}`}>{t.visit.eyebrow}</p>
-          <h2 className={`mt-4 font-display text-3xl uppercase text-ink sm:text-4xl ${ethiopic}`}>{t.visit.title}</h2>
+    <section id="visit" className="relative overflow-hidden bg-cream py-20 sm:py-28 md:py-36 text-charcoal">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8" lang={lang}>
+        
+        {/* Section Header */}
+        <Reveal className="text-center max-w-2xl mx-auto">
+          <div className="inline-flex items-center gap-2 rounded-full border border-orange/30 bg-orange/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-orange-deep">
+            <span>📍</span>
+            <span className={ethiopic}>{t.visit.eyebrow}</span>
+          </div>
+
+          <h2 className={`mt-5 font-display text-3xl uppercase text-ink sm:text-5xl !leading-[1.25] ${ethiopic}`}>
+            {t.visit.title}
+          </h2>
+          <div className="mx-auto mt-4 h-1 w-20 rounded-full bg-gradient-to-r from-orange to-gold" />
         </Reveal>
 
-        <div className="mt-14 grid gap-8 overflow-hidden rounded-2xl border border-orange/20 bg-white shadow-lg md:grid-cols-5">
-          <Reveal className="flex flex-col justify-center gap-5 p-8 md:col-span-2 md:p-10" delay={1}>
-            <div>
-              <p className={`text-xs font-semibold uppercase tracking-wider text-orange-deep ${ethiopic}`}>{t.visit.addressLabel}</p>
-              <p className="mt-1 text-base text-charcoal">{business.address}</p>
+        {/* Location & Map Container */}
+        <div className="mt-12 sm:mt-16 grid gap-0 overflow-hidden rounded-3xl border-2 border-orange/20 bg-white shadow-2xl md:grid-cols-5">
+          
+          {/* Info Side */}
+          <Reveal className="flex flex-col justify-between gap-6 p-6 sm:p-10 md:col-span-2 bg-gradient-to-b from-white via-cream/30 to-cream/60" delay={1}>
+            <div className="space-y-6">
+              
+              {/* Address */}
+              <div className="flex items-start gap-3.5">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange/10 text-orange font-bold text-lg">
+                  📍
+                </div>
+                <div>
+                  <p className={`text-xs font-bold uppercase tracking-wider text-orange-deep ${ethiopic}`}>{t.visit.addressLabel}</p>
+                  <p className="mt-1 text-sm sm:text-base text-charcoal leading-relaxed">{business.address}</p>
+                </div>
+              </div>
+
+              {/* Phone */}
+              <div className="flex items-start gap-3.5">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-cyan-deep/10 text-cyan-deep font-bold text-lg">
+                  📞
+                </div>
+                <div>
+                  <p className={`text-xs font-bold uppercase tracking-wider text-orange-deep ${ethiopic}`}>{t.visit.phoneLabel}</p>
+                  <a href={business.phoneHref} className="mt-1 block text-sm sm:text-base font-semibold text-charcoal hover:text-orange transition-colors">
+                    {business.phone}
+                  </a>
+                </div>
+              </div>
+
+              {/* Hours / Schedule */}
+              <div className="flex items-start gap-3.5">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gold/10 text-gold-soft font-bold text-lg">
+                  🕒
+                </div>
+                <div>
+                  <p className={`text-xs font-bold uppercase tracking-wider text-orange-deep ${ethiopic}`}>{t.visit.hoursLabel}</p>
+                  <p className={`mt-1 text-sm sm:text-base text-charcoal/90 leading-relaxed ${ethiopic}`}>{t.visit.hoursValue}</p>
+                </div>
+              </div>
+
             </div>
-            <div>
-              <p className={`text-xs font-semibold uppercase tracking-wider text-orange-deep ${ethiopic}`}>{t.visit.phoneLabel}</p>
-              <a href={business.phoneHref} className="mt-1 block text-base text-charcoal hover:text-orange">
-                {business.phone}
+
+            {/* Telegram Booking Action */}
+            <div className="pt-4 border-t border-orange/15">
+              <a
+                href={business.telegramHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`block w-full text-center rounded-full bg-gradient-to-r from-orange to-orange-soft py-3.5 px-6 text-xs sm:text-sm font-bold uppercase tracking-wider text-white shadow-[0_0_20px_rgba(242,128,30,0.4)] transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_35px_rgba(242,128,30,0.7)] ${ethiopic}`}
+              >
+                {t.visit.book}
               </a>
             </div>
-            <div>
-              <p className={`text-xs font-semibold uppercase tracking-wider text-orange-deep ${ethiopic}`}>{t.visit.hoursLabel}</p>
-              <p className={`mt-1 text-base text-charcoal ${ethiopic}`}>{t.visit.hoursValue}</p>
-            </div>
-            <a
-              href={business.telegramHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`mt-2 inline-block w-fit rounded-full bg-orange px-7 py-3 text-sm font-semibold uppercase tracking-wider text-white transition-colors hover:bg-orange-deep ${ethiopic}`}
-            >
-              {t.visit.book}
-            </a>
           </Reveal>
 
-          <Reveal className="min-h-[320px] md:col-span-3" delay={2}>
+          {/* Interactive Google Map iframe */}
+          <Reveal className="min-h-[350px] md:col-span-3 bg-cream-dark" delay={2}>
             <iframe
               title="Eliana Cinema location map"
               src={business.mapEmbedSrc}
-              className="h-full min-h-[320px] w-full border-0"
+              className="h-full min-h-[350px] w-full border-0 grayscale focus:grayscale-0 transition-all duration-500"
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
             />
           </Reveal>
+
         </div>
+
       </div>
     </section>
   );
 }
+
