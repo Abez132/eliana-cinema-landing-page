@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
-import { Anton, Yellowtail, Poppins, Noto_Sans_Ethiopic } from "next/font/google";
+import {
+  Anton,
+  Yellowtail,
+  Poppins,
+  Noto_Sans_Ethiopic,
+  Bebas_Neue,
+} from "next/font/google";
 import "./globals.css";
 import { LanguageProvider } from "@/lib/i18n";
 
@@ -7,6 +13,13 @@ const anton = Anton({
   subsets: ["latin"],
   weight: ["400"],
   variable: "--font-anton",
+  display: "swap",
+});
+
+const bebasNeue = Bebas_Neue({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-bebas-neue",
   display: "swap",
 });
 
@@ -44,16 +57,23 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: "Eliana Cinema",
-    description: "Experience the perfect cinema moment in the heart of Piassa, Addis Ababa.",
+    description:
+      "Experience the perfect cinema moment in the heart of Piassa, Addis Ababa.",
     locale: "en_ET",
     type: "website",
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
-      <body className={`${anton.variable} ${yellowtail.variable} ${poppins.variable} ${notoEthiopic.variable} font-body`}>
+      <body
+        className={`${anton.variable} ${bebasNeue.variable} ${yellowtail.variable} ${poppins.variable} ${notoEthiopic.variable} font-body`}
+      >
         <LanguageProvider>{children}</LanguageProvider>
       </body>
     </html>

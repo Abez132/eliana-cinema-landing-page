@@ -34,7 +34,7 @@ const config: Config = {
         charcoal: "#1C1B1F",
       },
       fontFamily: {
-        display: ["var(--font-anton)", "sans-serif"],
+        display: ["var(--font-bebas-neue)", "var(--font-anton)", "sans-serif"],
         script: ["var(--font-yellowtail)", "cursive"],
         body: ["var(--font-poppins)", "sans-serif"],
         ethiopic: ["var(--font-noto-ethiopic)", "sans-serif"],
