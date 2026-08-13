@@ -24,8 +24,9 @@ export default function FloatingReserveButton() {
         lang === "am" ? "font-ethiopic" : ""
       } ${show ? "opacity-100 translate-y-0" : "pointer-events-none opacity-0 translate-y-4"}`}
     >
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="animate-flicker">
-        <path d="M2 4l6-2 6 2v5c0 3-2.5 5-6 6-3.5-1-6-3-6-6V4Z" stroke="currentColor" strokeWidth="1.4" />
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="animate-flicker">
+        <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v2Z" />
+        <path d="M9 5v14" strokeDasharray="2 2" />
       </svg>
       {t.nav.book}
     </a>
