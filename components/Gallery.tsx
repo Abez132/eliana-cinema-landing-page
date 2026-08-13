@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import Reveal from "./Reveal";
 import { FilmstripDivider } from "./Ornaments";
@@ -9,10 +9,61 @@ import { useLanguage } from "@/lib/i18n";
 export default function Gallery() {
   const { t, lang } = useLanguage();
   const ethiopic = lang === "am" ? "font-ethiopic" : "";
-  const [selectedImage, setSelectedImage] = useState<{
-    label: string;
-    image: string;
-  } | null>(null);
+  const items = t.gallery.items;
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+  const activeItem = selectedIndex !== null ? items[selectedIndex] : null;
+
+  const handlePrev = useCallback(() => {
+    setSelectedIndex((prev) =>
+      prev !== null ? (prev - 1 + items.length) % items.length : null
+    );
+  }, [items.length]);
+
+  const handleNext = useCallback(() => {
+    setSelectedIndex((prev) =>
+      prev !== null ? (prev + 1) % items.length : null
+    );
+  }, [items.length]);
+
+  useEffect(() => {
+    if (selectedIndex === null) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") handlePrev();
+      if (e.key === "ArrowRight") handleNext();
+      if (e.key === "Escape") setSelectedIndex(null);
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedIndex, handlePrev, handleNext]);
+
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe) {
+      handleNext();
+    } else if (isRightSwipe) {
+      handlePrev();
+    }
+  };
 
   return (
     <>
@@ -47,11 +98,11 @@ export default function Gallery() {
           </Reveal>
 
           <div className="mt-12 sm:mt-16 grid grid-cols-2 gap-4 sm:grid-cols-4">
-            {t.gallery.items.map((item, i) => (
+            {items.map((item, i) => (
               <Reveal key={item.label} delay={(i % 4) as 0 | 1 | 2 | 3 | 4}>
                 <button
                   type="button"
-                  onClick={() => setSelectedImage(item)}
+                  onClick={() => setSelectedIndex(i)}
                   className="group relative block aspect-square w-full overflow-hidden rounded-3xl border border-white/15 bg-ink-soft text-left shadow-xl transition-all duration-500 hover:-translate-y-1.5 hover:border-gold/40"
                 >
                   <Image
@@ -75,39 +126,120 @@ export default function Gallery() {
         </div>
       </section>
 
-      {selectedImage && (
+      {selectedIndex !== null && activeItem && (
         <div
-          className="gallery-lightbox fixed inset-0 z-[60] flex items-center justify-center p-4"
-          onClick={() => setSelectedImage(null)}
+          className="gallery-lightbox fixed inset-0 z-[60] flex items-center justify-center p-2 sm:p-4 bg-black/85 backdrop-blur-md overflow-hidden"
+          onClick={() => setSelectedIndex(null)}
         >
           <button
             type="button"
             aria-label="Close gallery image"
             className="absolute inset-0 cursor-default"
-            onClick={() => setSelectedImage(null)}
+            onClick={() => setSelectedIndex(null)}
           />
           <div
-            className="relative z-10 w-full max-w-5xl overflow-hidden rounded-[2rem] border border-white/10 bg-ink shadow-2xl"
+            className="relative z-10 flex flex-col w-full max-w-5xl max-h-[92vh] sm:max-h-[88vh] overflow-hidden rounded-[1.25rem] sm:rounded-[2rem] border border-white/15 bg-ink shadow-2xl"
             onClick={(e) => e.stopPropagation()}
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
           >
-            <div className="flex items-center justify-between border-b border-white/10 bg-black/20 px-4 py-3 text-sm text-white/80">
-              <span className={ethiopic}>{selectedImage.label}</span>
+            {/* Header bar */}
+            <div className="flex-shrink-0 flex items-center justify-between border-b border-white/10 bg-black/40 px-4 sm:px-6 py-2.5 sm:py-3 text-sm text-white/80">
+              <div className="flex items-center gap-3">
+                <span className="rounded-full bg-gold/20 px-2.5 py-0.5 text-xs font-bold text-gold">
+                  {selectedIndex + 1} / {items.length}
+                </span>
+                <span className={`font-medium text-white ${ethiopic}`}>
+                  {activeItem.label}
+                </span>
+              </div>
               <button
                 type="button"
-                onClick={() => setSelectedImage(null)}
-                className="rounded-full border border-white/15 px-3 py-1.5 text-xs uppercase tracking-[0.2em] text-white/80 transition-colors hover:text-white"
+                onClick={() => setSelectedIndex(null)}
+                className="rounded-full border border-white/20 bg-white/5 px-3 py-1.5 text-xs uppercase tracking-[0.15em] text-white/80 transition-colors hover:bg-white/15 hover:text-white"
               >
                 Close
               </button>
             </div>
-            <div className="relative aspect-[16/10] w-full">
+
+            {/* Image viewer container with prev/next arrows */}
+            <div className="relative flex-1 min-h-[220px] sm:min-h-[320px] h-[50vh] sm:h-[60vh] max-h-[65vh] w-full bg-black/70 group flex items-center justify-center overflow-hidden">
               <Image
-                src={selectedImage.image}
-                alt={selectedImage.label}
+                src={activeItem.image}
+                alt={activeItem.label}
                 fill
-                className="object-cover"
-                sizes="100vw"
+                priority
+                className="object-contain p-2 sm:p-4 transition-all duration-300"
+                sizes="(max-width: 1280px) 100vw, 1280px"
               />
+
+              {/* Prev Button */}
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handlePrev();
+                }}
+                aria-label="Previous Image"
+                className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-white/20 bg-black/60 text-white/90 backdrop-blur-md transition-all duration-200 hover:scale-110 hover:border-gold/60 hover:bg-black/80 hover:text-gold focus:outline-none z-10"
+              >
+                <svg
+                  className="h-5 w-5 sm:h-6 sm:w-6 stroke-current"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="2.5"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                </svg>
+              </button>
+
+              {/* Next Button */}
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleNext();
+                }}
+                aria-label="Next Image"
+                className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-white/20 bg-black/60 text-white/90 backdrop-blur-md transition-all duration-200 hover:scale-110 hover:border-gold/60 hover:bg-black/80 hover:text-gold focus:outline-none z-10"
+              >
+                <svg
+                  className="h-5 w-5 sm:h-6 sm:w-6 stroke-current"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="2.5"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Bottom thumbnail strip scrollbar */}
+            <div className="flex-shrink-0 flex items-center gap-2 overflow-x-auto border-t border-white/10 bg-black/50 p-2 sm:p-3 scrollbar-thin scrollbar-thumb-white/20">
+              {items.map((item, idx) => (
+                <button
+                  key={item.label + idx}
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedIndex(idx);
+                  }}
+                  className={`relative h-12 w-16 sm:h-14 sm:w-20 flex-shrink-0 overflow-hidden rounded-lg border transition-all duration-300 ${
+                    idx === selectedIndex
+                      ? "border-gold ring-2 ring-gold/40 scale-105 opacity-100"
+                      : "border-white/15 opacity-50 hover:opacity-100 hover:border-white/40"
+                  }`}
+                >
+                  <Image
+                    src={item.image}
+                    alt={item.label}
+                    fill
+                    className="object-cover"
+                    sizes="80px"
+                  />
+                </button>
+              ))}
             </div>
           </div>
         </div>
