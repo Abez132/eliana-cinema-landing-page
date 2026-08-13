@@ -101,10 +101,10 @@ export const content = {
       title: "What Piassa Is Saying",
       subtitle: "Real guest feedback from public reviews.",
       items: [
-        { quote: "A great place for movie lovers — appealing lobby, superior screen and sound quality.", author: "Guest review" },
-        { quote: "The theater itself is well-maintained and looks nice, and the sound system is good.", author: "Guest review" },
-        { quote: "VIP is equipped with comfortable recliner seats.", author: "Guest review" },
-        { quote: "It's very nice and cozy — I really enjoyed my first time at the cinema.", author: "Guest review" },
+        { quote: "A great place for movie lovers — appealing lobby, superior screen and sound quality.", author: "Guest review", link: "https://maps.app.goo.gl/mc2fhd2FFCbaEQ8u7" },
+        { quote: "The theater itself is well-maintained and looks nice, and the sound system is good.", author: "Guest review", link: "https://maps.app.goo.gl/iFHJRer8ACqkKHse9" },
+        { quote: "VIP is equipped with comfortable recliner seats.", author: "Guest review", link: "https://maps.app.goo.gl/F1bgw8xnEoXJA9Sv8" },
+        { quote: "It's very nice and cozy — I really enjoyed my first time at the cinema.", author: "Guest review", link: "https://maps.app.goo.gl/2HJobEx4CewwMuxo6" },
       ],
     },
     gallery: {
@@ -218,10 +218,10 @@ export const content = {
       title: "ፒያሳ ምን ትላለች",
       subtitle: "ትክክለኛ የእንግዶች አስተያየት ከህዝባዊ ግምገማዎች።",
       items: [
-        { quote: "ለፊልም አፍቃሪዎች ግሩም ቦታ — ማራኪ አዳራሽ፣ ከፍተኛ ጥራት ያለው ስክሪን እና ድምጽ።", author: "የእንግዳ አስተያየት" },
-        { quote: "ቲያትር ቤቱ በደንብ የተያዘ እና ማራኪ ይመስላል፣ የድምጽ ስርዓቱም ጥሩ ነው።", author: "የእንግዳ አስተያየት" },
-        { quote: "ቪአይፒ ምቹ  መቀመጫዎች የተገጠመለት ነው።", author: "የእንግዳ አስተያየት" },
-        { quote: "በጣም ደስ የሚል እና አስደሳች ነው — የመጀመሪያ ጊዜዬን በጣም ወደድኩት።", author: "የእንግዳ አስተያየት" },
+        { quote: "ለፊልም አፍቃሪዎች ግሩም ቦታ — ማራኪ አዳራሽ፣ ከፍተኛ ጥራት ያለው ስክሪን እና ድምጽ።", author: "የእንግዳ አስተያየት", link: "https://maps.app.goo.gl/mc2fhd2FFCbaEQ8u7" },
+        { quote: "ቲያትር ቤቱ በደንብ የተያዘ እና ማራኪ ይመስላል፣ የድምጽ ስርዓቱም ጥሩ ነው።", author: "የእንግዳ አስተያየት", link: "https://maps.app.goo.gl/iFHJRer8ACqkKHse9" },
+        { quote: "ቪአይፒ ምቹ  መቀመጫዎች የተገጠመለት ነው።", author: "የእንግዳ አስተያየት", link: "https://maps.app.goo.gl/F1bgw8xnEoXJA9Sv8" },
+        { quote: "በጣም ደስ የሚል እና አስደሳች ነው — የመጀመሪያ ጊዜዬን በጣም ወደድኩት።", author: "የእንግዳ አስተያየት", link: "https://maps.app.goo.gl/2HJobEx4CewwMuxo6" },
       ],
     },
     gallery: {

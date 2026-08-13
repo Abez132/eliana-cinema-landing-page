@@ -4,8 +4,12 @@ import Reveal from "./Reveal";
 import { FilmstripDivider } from "./Ornaments";
 import { useLanguage } from "@/lib/i18n";
 
-const reviewSource =
-  "https://www.google.com/search?q=Eliana+Cinema+Addis+Ababa";
+const reviewLinks = [
+  "https://maps.app.goo.gl/mc2fhd2FFCbaEQ8u7",
+  "https://maps.app.goo.gl/iFHJRer8ACqkKHse9",
+  "https://maps.app.goo.gl/F1bgw8xnEoXJA9Sv8",
+  "https://maps.app.goo.gl/2HJobEx4CewwMuxo6",
+];
 
 export default function Reviews() {
   const { t, lang } = useLanguage();
@@ -47,66 +51,73 @@ export default function Reviews() {
           </Reveal>
 
           <div className="mt-14 sm:mt-16 grid gap-6 md:grid-cols-2">
-            {t.reviews.items.map((r, i) => (
-              <Reveal key={i} delay={(i % 4) as 0 | 1 | 2 | 3 | 4}>
-                <figure className="group relative flex h-full flex-col justify-between overflow-hidden rounded-3xl border border-orange/20 bg-white p-7 sm:p-8 shadow-md transition-all duration-500 hover:-translate-y-1.5 hover:border-orange/40 hover:shadow-xl">
-                  <div>
-                    <div className="flex items-center justify-between">
-                      <div
-                        className="flex gap-1 text-sm text-orange"
-                        aria-label="Five star rating"
-                      >
-                        {[...Array(5)].map((_, starIndex) => (
-                          <svg
-                            key={starIndex}
-                            viewBox="0 0 20 20"
-                            className="h-4 w-4 fill-current"
-                            aria-hidden="true"
-                          >
-                            <path d="M10 1.5l2.4 4.86 5.36.78-3.88 3.77.92 5.34L10 0 5.2 16.25l.92-5.34L2.24 7.14l5.36-.78L10 1.5Z" />
-                          </svg>
-                        ))}
-                      </div>
-                      <span className="text-4xl font-display text-orange/30 transition-colors group-hover:text-orange/60">
-                        “
-                      </span>
-                    </div>
+            {t.reviews.items.map((r, i) => {
+              const targetLink =
+                ("link" in r && typeof r.link === "string" && r.link)
+                  ? r.link
+                  : reviewLinks[i % reviewLinks.length];
 
-                    <blockquote
-                      className={`mt-3 text-base leading-relaxed text-charcoal/90 ${ethiopic}`}
-                    >
-                      {r.quote}
-                    </blockquote>
-                  </div>
-
-                  <figcaption className="mt-6 flex items-center justify-between gap-3 border-t border-orange/15 pt-4">
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-9 w-9 items-center justify-center rounded-full border border-orange/30 bg-orange/10 text-xs font-bold uppercase text-orange-deep">
-                        {r.author.slice(0, 2)}
-                      </div>
-                      <div>
-                        <p
-                          className={`text-xs font-bold uppercase tracking-wider text-orange-deep ${ethiopic}`}
+              return (
+                <Reveal key={i} delay={(i % 4) as 0 | 1 | 2 | 3 | 4}>
+                  <figure className="group relative flex h-full flex-col justify-between overflow-hidden rounded-3xl border border-orange/20 bg-white p-7 sm:p-8 shadow-md transition-all duration-500 hover:-translate-y-1.5 hover:border-orange/40 hover:shadow-xl">
+                    <div>
+                      <div className="flex items-center justify-between">
+                        <div
+                          className="flex gap-1 text-sm text-orange"
+                          aria-label="Five star rating"
                         >
-                          {r.author}
-                        </p>
-                        <p className="text-[10px] uppercase tracking-widest text-charcoal/50">
-                          Verified Guest Review
-                        </p>
+                          {[...Array(5)].map((_, starIndex) => (
+                            <svg
+                              key={starIndex}
+                              viewBox="0 0 20 20"
+                              className="h-4 w-4 fill-current"
+                              aria-hidden="true"
+                            >
+                              <path d="M10 1.5l2.4 4.86 5.36.78-3.88 3.77.92 5.34L10 0 5.2 16.25l.92-5.34L2.24 7.14l5.36-.78L10 1.5Z" />
+                            </svg>
+                          ))}
+                        </div>
+                        <span className="text-4xl font-display text-orange/30 transition-colors group-hover:text-orange/60">
+                          “
+                        </span>
                       </div>
+
+                      <blockquote
+                        className={`mt-3 text-base leading-relaxed text-charcoal/90 ${ethiopic}`}
+                      >
+                        {r.quote}
+                      </blockquote>
                     </div>
-                    <a
-                      href={reviewSource}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="rounded-full border border-orange/25 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-orange-deep transition-colors hover:border-orange hover:bg-orange/5"
-                    >
-                      Source
-                    </a>
-                  </figcaption>
-                </figure>
-              </Reveal>
-            ))}
+
+                    <figcaption className="mt-6 flex items-center justify-between gap-3 border-t border-orange/15 pt-4">
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-9 w-9 items-center justify-center rounded-full border border-orange/30 bg-orange/10 text-xs font-bold uppercase text-orange-deep">
+                          {r.author.slice(0, 2)}
+                        </div>
+                        <div>
+                          <p
+                            className={`text-xs font-bold uppercase tracking-wider text-orange-deep ${ethiopic}`}
+                          >
+                            {r.author}
+                          </p>
+                          <p className="text-[10px] uppercase tracking-widest text-charcoal/50">
+                            Verified Guest Review
+                          </p>
+                        </div>
+                      </div>
+                      <a
+                        href={targetLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="rounded-full border border-orange/25 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-orange-deep transition-colors hover:border-orange hover:bg-orange/5"
+                      >
+                        Source
+                      </a>
+                    </figcaption>
+                  </figure>
+                </Reveal>
+              );
+            })}
           </div>
         </div>
       </section>
